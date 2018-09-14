@@ -1,0 +1,16 @@
+= Client
+1. Create account -> criar
+2. Cancel account -> cancelar
+3. Tranfer money  -> transferir <destino> <valor>
+
+= Agent
+1. Deposit money  -> depositar  <destino> <valor>
+2. Withdraw money -> levantar   <destino> <valor>
+
+
+== Domain
+1. User
+ - Number
+ - State
+ - Is agent?
+ - Balance
