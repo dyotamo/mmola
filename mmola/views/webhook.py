@@ -21,7 +21,7 @@ actions = [
 class Listener(View):
     """ Telerivet listener for incomming messages """
     def post(self, request):
-        webhook_secret = 'xyz'
+        webhook_secret = os.environ["WEBHOOK_SECRET"]
         
         if request.POST.get('secret') != webhook_secret:
             return HR("Invalid webhook secret", 'text/plain', 403)

@@ -9,6 +9,7 @@ django-heroku = "*"
 "psycopg2" = "*"
 "psycopg2-binary" = "*"
 django-auditlog = "*"
+dj-database-url = "*"
 
 [requires]
 python_version = "3.6"
