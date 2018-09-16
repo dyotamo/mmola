@@ -15,9 +15,6 @@ class Account(models.Model):
     active  = models.BooleanField(
         default=True
     )
-    agent   = models.BooleanField(
-        default=False
-    )
     balance = models.PositiveIntegerField(
         default=0
     )

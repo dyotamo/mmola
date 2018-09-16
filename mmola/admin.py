@@ -10,4 +10,4 @@ admin.site.unregister(Group)
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ["contact", "active", "agent", "balance"]
+    list_display = ["contact", "active", "balance"]

@@ -2,9 +2,9 @@ import os
 import re
 
 from django.views import View
-from django.http import HttpResponse as HR
+from django.http import HttpResponse as HR, JsonResponse as JR
 
-from ..executors import AccountExecutor
+from ..executors import AccountExecutor, set_message
 
 # Use cases
 actions = [
@@ -12,9 +12,15 @@ actions = [
     ("cancel_account", "^cancelar$"),
     ("transfer_money", "^transferir 8[2-7][0-9]{7} [0-9]+$"),
     ("check_balance" , "^saldo$"),
-    ("deposit_money" , "^depositar 8[2-7][0-9]{7} [0-9]+$"),
-    ("withdraw_money", "^levantar 8[2-7][0-9]{7} [0-9]+$")
 ]
+
+EMPTY_MSG = INVALID_FORMAT = """Formato de mensagem inválido. 
+Opções disponíveis: 
+- Criar (Para criar conta) 
+- Saldo (Para consultar o saldo corrente) 
+- Cancelar (Para cancelar a sua conta) 
+- Tranferir <Número> <Valor> (Para transferir 
+dinheiro para o número de destino)"""
 
 class Listener(View):
     """ Telerivet listener for incomming messages """
@@ -29,16 +35,13 @@ class Listener(View):
             content = request.POST.get('content')
 
             if not content:
-                return HR("Empty content", 'text/plain', 403)
+                return JR(set_message(EMPTY_MSG))
 
             for action, regex in actions:
-                if re.match(regex, content):
+                if re.match(regex, content.lower()):
                     executor = AccountExecutor(from_number, content)
-                    method   = getattr(executor, action)
-                    
-                    # Invoke method by reflection
-                    return method()
+                    return getattr(executor, action)()
 
-            return HR("Invalid action (show actions list)", 'text/plain', 404)
+            return JR(set_message(INVALID_FORMAT))
         else:
             return HR("Event not implemented", 'text/plain', 403)
