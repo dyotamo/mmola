@@ -5,19 +5,21 @@ from django.contrib.humanize.templatetags.humanize import intcomma
 
 from .models import Account
 
+
 def set_message(message):
-        return {'messages': [{'content': message}]}
+    return {'messages': [{'content': message}]}
+
 
 class AccountExecutor:
     """ A bean class containing all 
     account related operations and utils """
     NO_BALANCE = 0
-    OK         = 1
-    ZERO       = 2
-    
+    OK = 1
+    ZERO = 2
+
     def __init__(self, from_number, content):
         self.from_number = from_number
-        self.content     = content
+        self.content = content
 
     def _get_active_account(self, account_number):
         return Account.objects.get(contact=account_number, active=True)
@@ -31,8 +33,10 @@ class AccountExecutor:
             return self.NO_BALANCE
 
         with transaction.atomic():
-            source.balance -= amount; target.balance += amount
-            source.save(); target.save()
+            source.balance -= amount
+            target.balance += amount
+            source.save()
+            target.save()
 
             # TODO Send message to target
             return self.OK
@@ -46,7 +50,8 @@ class AccountExecutor:
 
     def create_account(self):
         try:
-            _, created = Account.objects.get_or_create(contact=self.from_number)
+            _, created = Account.objects.get_or_create(
+                contact=self.from_number)
             if created:
                 return JR(set_message("Registado com sucesso no sistema"))
             return JR(set_message("Usuário já existe no sistema"))
@@ -84,7 +89,7 @@ class AccountExecutor:
 
             if result == self.OK:
                 return JR(set_message(
-                    "Transferência de {} Mt para {} feita "\
+                    "Transferência de {} Mt para {} feita "
                     "com sucesso".format(amount, target.contact)
                 ))
         except Account.DoesNotExist:
@@ -96,4 +101,3 @@ class AccountExecutor:
             return JR(set_message("O seu saldo é de {} Mt".format(intcomma(balance))))
         except Account.DoesNotExist:
             return JR(set_message("Usuário não existe no sistema"))
-

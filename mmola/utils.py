@@ -1,8 +1,5 @@
 import functools
 
-audi_codes = {
-
-}
 
 def audit(audit_code, **params):
     def decorator_audit(func):
