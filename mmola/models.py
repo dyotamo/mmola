@@ -6,19 +6,10 @@ from auditlog.registry import auditlog
 
 class Account(models.Model):
     """ Represents a user or agent account """
-    contact = models.CharField(
-        max_length=13,
-        unique=True,
-        validators=[
-            RegexValidator("^\+2588[2-7][0-9]{7}$")
-        ]
-    )
-    active = models.BooleanField(
-        default=True
-    )
-    balance = models.PositiveIntegerField(
-        default=0
-    )
+    contact = models.CharField(max_length=13, unique=True, validators=[
+                               RegexValidator("^\+2588[2-7][0-9]{7}$")])
+    active = models.BooleanField(default=True)
+    balance = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.contact

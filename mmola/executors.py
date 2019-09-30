@@ -78,20 +78,13 @@ class AccountExecutor:
             result = self._update_balance(source, target, int(amount))
 
             if result == self.ZERO:
-                return JR(set_message(
-                    "Não pode transfer 0 Mt. Use um valor superior a 0"
-                ))
+                return JR(set_message("Não pode transfer 0 Mt. Use um valor superior a 0"))
 
             if result == self.NO_BALANCE:
-                return JR(set_message(
-                    "Sem saldo suficiente para proceder com a transferência"
-                ))
+                return JR(set_message("Sem saldo suficiente para proceder com a transferência"))
 
             if result == self.OK:
-                return JR(set_message(
-                    "Transferência de {} Mt para {} feita "
-                    "com sucesso".format(amount, target.contact)
-                ))
+                return JR(set_message("Transferência de {} Mt para {} feita com sucesso".format(amount, target.contact)))
         except Account.DoesNotExist:
             return JR(set_message("Usuário não existe no sistema"))
 
